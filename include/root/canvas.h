@@ -3,13 +3,14 @@
 #define EXAMPLE_H
 
 #include <QWidget>
+#include <TCanvas.h>
 
 class QPaintEvent;
 class QResizeEvent;
 class QMouseEvent;
 class QPushButton;
 class QTimer;
-class TCanvas;
+//class TCanvas;
 
 class QRootCanvas : public QWidget
 {
@@ -38,10 +39,12 @@ public:
    QMainCanvas( QWidget *parent = 0);
    virtual ~QMainCanvas() {}
    virtual void changeEvent(QEvent * e);
-
+   QRootCanvas* getQCanvas() { return canvas;}
+   
 public slots:
    void handle_root_events();
    void ModAndUpd();
+   void SetLogy(int);
    void ModAndUpd_Pads();
    void Divide(int,int);
    void cd(int);

@@ -8,6 +8,7 @@
 
 #include <TMath.h>
 #include <TString.h>
+#include <TLegend.h>
 #include <TStyle.h>
 #include <TPad.h>
 
@@ -56,6 +57,7 @@ public:
     Data_Per_Country * Country_China;
     Data_Per_Country * Country_Italy;
     Data_Per_Country * Country_Iran;
+    Data_Per_Country * Country_Japan;
     Data_Per_Country * Country_Germany;
     Data_Per_Country * Country_France;
     Data_Per_Country * Country_UK;
@@ -65,7 +67,6 @@ public:
     
 private:
 
-    int n_future_days;
     bool verbose;
     
     void CreateCanvas();
@@ -82,9 +83,29 @@ private:
     void UpdatePads();
 
     void ShiftCountryNDays( Data_Per_Country * Country, int shift_ndays, int n_future_days );
+
+    void AddLegend( TLegend * legend, Data_Per_Country * country,
+		    int shift_ndays,
+		    bool plot_confirmed,
+		    bool plot_deaths,
+		    bool plot_recovered );
+    
+    void DrawLegends();
     
     TH1D *h_main_plot;
 
+    TLegend * Legend_China;
+    TLegend * Legend_France;
+    TLegend * Legend_Germany;
+    TLegend * Legend_Iran;
+    TLegend * Legend_Italy;
+    TLegend * Legend_Japan;
+    TLegend * Legend_SKorea;
+    TLegend * Legend_Spain;
+    TLegend * Legend_Swiss;
+    TLegend * Legend_UK;
+    TLegend * Legend_USA;
+    
     int MaximumCases;
     
     //--------------------------------

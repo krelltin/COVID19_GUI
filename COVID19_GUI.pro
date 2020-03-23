@@ -9,7 +9,8 @@
 
 QT+= core gui network widgets
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11 \
+    \$(filter-out -stdlib=libc++ -pthread , \$(ROOTCFLAGS))
 TARGET = COVID19_GUI
 TEMPLATE = app
 
@@ -21,7 +22,13 @@ LIBS += -L$(ROOTSYS)/lib \
     -lMathCore \
     -lCore \
     -lHist \
-    -lGpad
+    -lGpad \
+    -lm \
+    -lROOTDataFrame \
+    -ldl \
+    -lGraf \
+    -lGraf3d \
+    \$(filter-out -stdlib=libc++ -pthread , \$(ROOTGLIBS))
 
 
 SOURCES +=\

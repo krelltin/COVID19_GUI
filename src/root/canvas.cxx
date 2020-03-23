@@ -179,6 +179,21 @@ void QMainCanvas::ModAndUpd()
     canvas->getCanvas()->Update();
 }
 
+void QMainCanvas::SetLogy(int val)
+{
+  //This method calls Mod and Upd
+  //For each pad on the canvas.
+  ///To be used only for canvases
+  for(int i=1;i<=noOfPads;i++)
+    {
+      canvas->getCanvas()->cd(i);
+      canvas->getCanvas()->SetLogy(val);
+      gPad->SetLogy(val);
+      gPad->Update();
+    }
+}
+
+
 void QMainCanvas::ModAndUpd_Pads()
 {
     //This method calls Mod and Upd
@@ -186,7 +201,7 @@ void QMainCanvas::ModAndUpd_Pads()
     ///To be used only for canvases that have been Divide'd
     for(int i=1;i<=noOfPads;i++)
     {
-        canvas->getCanvas()->cd(i);//pads or i
+        canvas->getCanvas()->cd(i);//pads or i	
         gPad->Modified();
         gPad->Update();
 

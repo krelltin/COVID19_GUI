@@ -14,7 +14,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -std=c++11 -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -std=c++11 $(filter-out -stdlib=libc++ -pthread , $(ROOTCFLAGS)) -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -I$(ROOTSYS)/include -Iinclude -Iinclude/root -I/opt/Qt3/5.9.9/gcc_64/include -I/opt/Qt3/5.9.9/gcc_64/include/QtWidgets -I/opt/Qt3/5.9.9/gcc_64/include/QtGui -I/opt/Qt3/5.9.9/gcc_64/include/QtNetwork -I/opt/Qt3/5.9.9/gcc_64/include/QtCore -Ibuild -isystem /usr/include/libdrm -Ibuild -I/opt/Qt3/5.9.9/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/Qt3/5.9.9/gcc_64/bin/qmake
 DEL_FILE      = rm -f
@@ -38,7 +38,7 @@ DISTNAME      = COVID19_GUI1.0.0
 DISTDIR = /mnt/c/Users/sssun/Documents/Coronavirus_Analysis/CoronaGUI/build/COVID19_GUI1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/opt/Qt3/5.9.9/gcc_64/lib
-LIBS          = $(SUBLIBS) -L$(ROOTSYS)/lib -lMathCore -lCore -lHist -lGpad -L/opt/Qt3/5.9.9/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L$(ROOTSYS)/lib -lMathCore -lCore -lHist -lGpad -lm -lROOTDataFrame -ldl -lGraf -lGraf3d $(filter-out -stdlib=libc++ -pthread , $(ROOTGLIBS)) -L/opt/Qt3/5.9.9/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -688,7 +688,7 @@ compiler_moc_predefs_make_all: build/moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) build/moc_predefs.h
 build/moc_predefs.h: /opt/Qt3/5.9.9/gcc_64/mkspecs/features/data/dummy.cpp
-	g++ -pipe -std=c++11 -O2 -Wall -W -dM -E -o build/moc_predefs.h /opt/Qt3/5.9.9/gcc_64/mkspecs/features/data/dummy.cpp
+	g++ -pipe -std=c++11 $(filter-out -stdlib=libc++ -pthread , $(ROOTCFLAGS)) -O2 -Wall -W -dM -E -o build/moc_predefs.h /opt/Qt3/5.9.9/gcc_64/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all: build/moc_mainwindow.cpp build/moc_canvas.cpp
 compiler_moc_header_clean:
@@ -794,12 +794,10 @@ build/moc_mainwindow.cpp: include/root/canvas.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qtouchdevice.h \
-		include/Data_Analyzer.h \
-		include/Data_Per_Country.h \
-		include/Data_Per_Province.h \
-		include/Data_Per_Day.h \
-		$(ROOTSYS)/include/TString.h \
-		../../root/include/TMathBase.h \
+		$(ROOTSYS)/include/TCanvas.h \
+		$(ROOTSYS)/include/TPad.h \
+		../../root/include/TVirtualPad.h \
+		../../root/include/TAttPad.h \
 		../../root/include/Rtypes.h \
 		../../root/include/RtypesCore.h \
 		$(ROOTSYS)/include/ROOT/RConfig.h \
@@ -812,46 +810,27 @@ build/moc_mainwindow.cpp: include/root/canvas.h \
 		../../root/include/TSchemaHelper.h \
 		../../root/include/TIsAProxy.h \
 		../../root/include/TVirtualIsAProxy.h \
+		../../root/include/TVirtualX.h \
+		../../root/include/TNamed.h \
+		../../root/include/TObject.h \
+		../../root/include/TStorage.h \
+		../../root/include/TVersionCheck.h \
+		$(ROOTSYS)/include/TString.h \
+		../../root/include/TMathBase.h \
 		../../root/include/ROOT/RStringView.hxx \
 		../../root/include/ROOT/RWrap_libcpp_string_view.h \
 		../../root/include/ROOT/libcpp_string_view.h \
 		../../root/include/ROOT/TypeTraits.hxx \
 		$(ROOTSYS)/include/ROOT/RSpan.hxx \
 		$(ROOTSYS)/include/ROOT/span.hxx \
-		$(ROOTSYS)/include/TH1F.h \
-		../../root/include/TH1.h \
-		../../root/include/TAxis.h \
-		../../root/include/TNamed.h \
-		../../root/include/TObject.h \
-		../../root/include/TStorage.h \
-		../../root/include/TVersionCheck.h \
-		../../root/include/TAttAxis.h \
-		../../root/include/TArrayD.h \
-		../../root/include/TArray.h \
 		../../root/include/TAttLine.h \
 		../../root/include/TAttFill.h \
-		../../root/include/TAttMarker.h \
-		../../root/include/TArrayC.h \
-		../../root/include/TArrayS.h \
-		../../root/include/TArrayI.h \
-		../../root/include/TArrayF.h \
-		../../root/include/Foption.h \
-		../../root/include/Fit/FitExecutionPolicy.h \
-		../../root/include/TVectorFfwd.h \
-		../../root/include/TVectorDfwd.h \
-		../../root/include/TFitResultPtr.h \
-		$(ROOTSYS)/include/TMath.h \
-		../../root/include/TError.h \
-		$(ROOTSYS)/include/TStyle.h \
 		../../root/include/TAttText.h \
-		../../root/include/TColor.h \
-		$(ROOTSYS)/include/TPad.h \
-		../../root/include/TVirtualPad.h \
-		../../root/include/TAttPad.h \
-		../../root/include/TVirtualX.h \
+		../../root/include/TAttMarker.h \
 		../../root/include/GuiTypes.h \
 		../../root/include/Buttons.h \
 		../../root/include/TQObject.h \
+		../../root/include/TError.h \
 		../../root/include/TList.h \
 		../../root/include/TSeqCollection.h \
 		../../root/include/TCollection.h \
@@ -870,6 +849,33 @@ build/moc_mainwindow.cpp: include/root/canvas.h \
 		../../root/include/ThreadLocalStorage.h \
 		../../root/include/TAttBBox2D.h \
 		../../root/include/TPoint.h \
+		../../root/include/TAttCanvas.h \
+		../../root/include/TCanvasImp.h \
+		include/Data_Analyzer.h \
+		include/Data_Per_Country.h \
+		include/Data_Per_Province.h \
+		include/Data_Per_Day.h \
+		$(ROOTSYS)/include/TH1F.h \
+		../../root/include/TH1.h \
+		../../root/include/TAxis.h \
+		../../root/include/TAttAxis.h \
+		../../root/include/TArrayD.h \
+		../../root/include/TArray.h \
+		../../root/include/TArrayC.h \
+		../../root/include/TArrayS.h \
+		../../root/include/TArrayI.h \
+		../../root/include/TArrayF.h \
+		../../root/include/Foption.h \
+		../../root/include/Fit/FitExecutionPolicy.h \
+		../../root/include/TVectorFfwd.h \
+		../../root/include/TVectorDfwd.h \
+		../../root/include/TFitResultPtr.h \
+		$(ROOTSYS)/include/TMath.h \
+		$(ROOTSYS)/include/TLegend.h \
+		../../root/include/TPave.h \
+		../../root/include/TBox.h \
+		$(ROOTSYS)/include/TStyle.h \
+		../../root/include/TColor.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qmainwindow.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qtabwidget.h \
@@ -1021,6 +1027,63 @@ build/moc_canvas.cpp: /opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QWidget \
 		/opt/Qt3/5.9.9/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qtouchdevice.h \
+		$(ROOTSYS)/include/TCanvas.h \
+		$(ROOTSYS)/include/TPad.h \
+		../../root/include/TVirtualPad.h \
+		../../root/include/TAttPad.h \
+		../../root/include/Rtypes.h \
+		../../root/include/RtypesCore.h \
+		$(ROOTSYS)/include/ROOT/RConfig.h \
+		../../root/include/RVersion.h \
+		$(ROOTSYS)/include/RConfigure.h \
+		../../root/include/DllImport.h \
+		../../root/include/snprintf.h \
+		../../root/include/strlcpy.h \
+		../../root/include/TGenericClassInfo.h \
+		../../root/include/TSchemaHelper.h \
+		../../root/include/TIsAProxy.h \
+		../../root/include/TVirtualIsAProxy.h \
+		../../root/include/TVirtualX.h \
+		../../root/include/TNamed.h \
+		../../root/include/TObject.h \
+		../../root/include/TStorage.h \
+		../../root/include/TVersionCheck.h \
+		$(ROOTSYS)/include/TString.h \
+		../../root/include/TMathBase.h \
+		../../root/include/ROOT/RStringView.hxx \
+		../../root/include/ROOT/RWrap_libcpp_string_view.h \
+		../../root/include/ROOT/libcpp_string_view.h \
+		../../root/include/ROOT/TypeTraits.hxx \
+		$(ROOTSYS)/include/ROOT/RSpan.hxx \
+		$(ROOTSYS)/include/ROOT/span.hxx \
+		../../root/include/TAttLine.h \
+		../../root/include/TAttFill.h \
+		../../root/include/TAttText.h \
+		../../root/include/TAttMarker.h \
+		../../root/include/GuiTypes.h \
+		../../root/include/Buttons.h \
+		../../root/include/TQObject.h \
+		../../root/include/TError.h \
+		../../root/include/TList.h \
+		../../root/include/TSeqCollection.h \
+		../../root/include/TCollection.h \
+		../../root/include/TIterator.h \
+		../../root/include/TVirtualRWMutex.h \
+		../../root/include/TVirtualMutex.h \
+		../../root/include/TVirtualQConnection.h \
+		../../root/include/TInterpreter.h \
+		../../root/include/TDictionary.h \
+		../../root/include/ESTLType.h \
+		../../root/include/TInterpreterValue.h \
+		../../root/include/TQClass.h \
+		../../root/include/TClass.h \
+		../../root/include/TObjArray.h \
+		../../root/include/TObjString.h \
+		../../root/include/ThreadLocalStorage.h \
+		../../root/include/TAttBBox2D.h \
+		../../root/include/TPoint.h \
+		../../root/include/TAttCanvas.h \
+		../../root/include/TCanvasImp.h \
 		include/root/canvas.h \
 		build/moc_predefs.h \
 		/opt/Qt3/5.9.9/gcc_64/bin/moc
@@ -1147,12 +1210,10 @@ build/main.o: src/main.cpp include/mainwindow.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qtouchdevice.h \
-		include/Data_Analyzer.h \
-		include/Data_Per_Country.h \
-		include/Data_Per_Province.h \
-		include/Data_Per_Day.h \
-		$(ROOTSYS)/include/TString.h \
-		../../root/include/TMathBase.h \
+		$(ROOTSYS)/include/TCanvas.h \
+		$(ROOTSYS)/include/TPad.h \
+		../../root/include/TVirtualPad.h \
+		../../root/include/TAttPad.h \
 		../../root/include/Rtypes.h \
 		../../root/include/RtypesCore.h \
 		$(ROOTSYS)/include/ROOT/RConfig.h \
@@ -1165,46 +1226,27 @@ build/main.o: src/main.cpp include/mainwindow.h \
 		../../root/include/TSchemaHelper.h \
 		../../root/include/TIsAProxy.h \
 		../../root/include/TVirtualIsAProxy.h \
+		../../root/include/TVirtualX.h \
+		../../root/include/TNamed.h \
+		../../root/include/TObject.h \
+		../../root/include/TStorage.h \
+		../../root/include/TVersionCheck.h \
+		$(ROOTSYS)/include/TString.h \
+		../../root/include/TMathBase.h \
 		../../root/include/ROOT/RStringView.hxx \
 		../../root/include/ROOT/RWrap_libcpp_string_view.h \
 		../../root/include/ROOT/libcpp_string_view.h \
 		../../root/include/ROOT/TypeTraits.hxx \
 		$(ROOTSYS)/include/ROOT/RSpan.hxx \
 		$(ROOTSYS)/include/ROOT/span.hxx \
-		$(ROOTSYS)/include/TH1F.h \
-		../../root/include/TH1.h \
-		../../root/include/TAxis.h \
-		../../root/include/TNamed.h \
-		../../root/include/TObject.h \
-		../../root/include/TStorage.h \
-		../../root/include/TVersionCheck.h \
-		../../root/include/TAttAxis.h \
-		../../root/include/TArrayD.h \
-		../../root/include/TArray.h \
 		../../root/include/TAttLine.h \
 		../../root/include/TAttFill.h \
-		../../root/include/TAttMarker.h \
-		../../root/include/TArrayC.h \
-		../../root/include/TArrayS.h \
-		../../root/include/TArrayI.h \
-		../../root/include/TArrayF.h \
-		../../root/include/Foption.h \
-		../../root/include/Fit/FitExecutionPolicy.h \
-		../../root/include/TVectorFfwd.h \
-		../../root/include/TVectorDfwd.h \
-		../../root/include/TFitResultPtr.h \
-		$(ROOTSYS)/include/TMath.h \
-		../../root/include/TError.h \
-		$(ROOTSYS)/include/TStyle.h \
 		../../root/include/TAttText.h \
-		../../root/include/TColor.h \
-		$(ROOTSYS)/include/TPad.h \
-		../../root/include/TVirtualPad.h \
-		../../root/include/TAttPad.h \
-		../../root/include/TVirtualX.h \
+		../../root/include/TAttMarker.h \
 		../../root/include/GuiTypes.h \
 		../../root/include/Buttons.h \
 		../../root/include/TQObject.h \
+		../../root/include/TError.h \
 		../../root/include/TList.h \
 		../../root/include/TSeqCollection.h \
 		../../root/include/TCollection.h \
@@ -1223,6 +1265,33 @@ build/main.o: src/main.cpp include/mainwindow.h \
 		../../root/include/ThreadLocalStorage.h \
 		../../root/include/TAttBBox2D.h \
 		../../root/include/TPoint.h \
+		../../root/include/TAttCanvas.h \
+		../../root/include/TCanvasImp.h \
+		include/Data_Analyzer.h \
+		include/Data_Per_Country.h \
+		include/Data_Per_Province.h \
+		include/Data_Per_Day.h \
+		$(ROOTSYS)/include/TH1F.h \
+		../../root/include/TH1.h \
+		../../root/include/TAxis.h \
+		../../root/include/TAttAxis.h \
+		../../root/include/TArrayD.h \
+		../../root/include/TArray.h \
+		../../root/include/TArrayC.h \
+		../../root/include/TArrayS.h \
+		../../root/include/TArrayI.h \
+		../../root/include/TArrayF.h \
+		../../root/include/Foption.h \
+		../../root/include/Fit/FitExecutionPolicy.h \
+		../../root/include/TVectorFfwd.h \
+		../../root/include/TVectorDfwd.h \
+		../../root/include/TFitResultPtr.h \
+		$(ROOTSYS)/include/TMath.h \
+		$(ROOTSYS)/include/TLegend.h \
+		../../root/include/TPave.h \
+		../../root/include/TBox.h \
+		$(ROOTSYS)/include/TStyle.h \
+		../../root/include/TColor.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qmainwindow.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qtabwidget.h \
@@ -1387,12 +1456,10 @@ build/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qtouchdevice.h \
-		include/Data_Analyzer.h \
-		include/Data_Per_Country.h \
-		include/Data_Per_Province.h \
-		include/Data_Per_Day.h \
-		$(ROOTSYS)/include/TString.h \
-		../../root/include/TMathBase.h \
+		$(ROOTSYS)/include/TCanvas.h \
+		$(ROOTSYS)/include/TPad.h \
+		../../root/include/TVirtualPad.h \
+		../../root/include/TAttPad.h \
 		../../root/include/Rtypes.h \
 		../../root/include/RtypesCore.h \
 		$(ROOTSYS)/include/ROOT/RConfig.h \
@@ -1405,46 +1472,27 @@ build/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		../../root/include/TSchemaHelper.h \
 		../../root/include/TIsAProxy.h \
 		../../root/include/TVirtualIsAProxy.h \
+		../../root/include/TVirtualX.h \
+		../../root/include/TNamed.h \
+		../../root/include/TObject.h \
+		../../root/include/TStorage.h \
+		../../root/include/TVersionCheck.h \
+		$(ROOTSYS)/include/TString.h \
+		../../root/include/TMathBase.h \
 		../../root/include/ROOT/RStringView.hxx \
 		../../root/include/ROOT/RWrap_libcpp_string_view.h \
 		../../root/include/ROOT/libcpp_string_view.h \
 		../../root/include/ROOT/TypeTraits.hxx \
 		$(ROOTSYS)/include/ROOT/RSpan.hxx \
 		$(ROOTSYS)/include/ROOT/span.hxx \
-		$(ROOTSYS)/include/TH1F.h \
-		../../root/include/TH1.h \
-		../../root/include/TAxis.h \
-		../../root/include/TNamed.h \
-		../../root/include/TObject.h \
-		../../root/include/TStorage.h \
-		../../root/include/TVersionCheck.h \
-		../../root/include/TAttAxis.h \
-		../../root/include/TArrayD.h \
-		../../root/include/TArray.h \
 		../../root/include/TAttLine.h \
 		../../root/include/TAttFill.h \
-		../../root/include/TAttMarker.h \
-		../../root/include/TArrayC.h \
-		../../root/include/TArrayS.h \
-		../../root/include/TArrayI.h \
-		../../root/include/TArrayF.h \
-		../../root/include/Foption.h \
-		../../root/include/Fit/FitExecutionPolicy.h \
-		../../root/include/TVectorFfwd.h \
-		../../root/include/TVectorDfwd.h \
-		../../root/include/TFitResultPtr.h \
-		$(ROOTSYS)/include/TMath.h \
-		../../root/include/TError.h \
-		$(ROOTSYS)/include/TStyle.h \
 		../../root/include/TAttText.h \
-		../../root/include/TColor.h \
-		$(ROOTSYS)/include/TPad.h \
-		../../root/include/TVirtualPad.h \
-		../../root/include/TAttPad.h \
-		../../root/include/TVirtualX.h \
+		../../root/include/TAttMarker.h \
 		../../root/include/GuiTypes.h \
 		../../root/include/Buttons.h \
 		../../root/include/TQObject.h \
+		../../root/include/TError.h \
 		../../root/include/TList.h \
 		../../root/include/TSeqCollection.h \
 		../../root/include/TCollection.h \
@@ -1463,6 +1511,33 @@ build/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		../../root/include/ThreadLocalStorage.h \
 		../../root/include/TAttBBox2D.h \
 		../../root/include/TPoint.h \
+		../../root/include/TAttCanvas.h \
+		../../root/include/TCanvasImp.h \
+		include/Data_Analyzer.h \
+		include/Data_Per_Country.h \
+		include/Data_Per_Province.h \
+		include/Data_Per_Day.h \
+		$(ROOTSYS)/include/TH1F.h \
+		../../root/include/TH1.h \
+		../../root/include/TAxis.h \
+		../../root/include/TAttAxis.h \
+		../../root/include/TArrayD.h \
+		../../root/include/TArray.h \
+		../../root/include/TArrayC.h \
+		../../root/include/TArrayS.h \
+		../../root/include/TArrayI.h \
+		../../root/include/TArrayF.h \
+		../../root/include/Foption.h \
+		../../root/include/Fit/FitExecutionPolicy.h \
+		../../root/include/TVectorFfwd.h \
+		../../root/include/TVectorDfwd.h \
+		../../root/include/TFitResultPtr.h \
+		$(ROOTSYS)/include/TMath.h \
+		$(ROOTSYS)/include/TLegend.h \
+		../../root/include/TPave.h \
+		../../root/include/TBox.h \
+		$(ROOTSYS)/include/TStyle.h \
+		../../root/include/TColor.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qmainwindow.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qtabwidget.h \
@@ -1510,6 +1585,40 @@ build/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QFileDialog \
 		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qfiledialog.h \
 		build/ui_mainwindow.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtCore/QVariant \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QCheckBox \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qcheckbox.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QGridLayout \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qgridlayout.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QHBoxLayout \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QMenuBar \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qmenubar.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qmenu.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QRadioButton \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qradiobutton.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QSpinBox \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/qspinbox.h \
+		/opt/Qt3/5.9.9/gcc_64/include/QtWidgets/QVBoxLayout \
 		include/types.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/mainwindow.o src/mainwindow.cpp
 
