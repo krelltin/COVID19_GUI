@@ -1,6 +1,6 @@
 # COVID19_GUI
 ---
-contact: **Krell.Tin@gmail.com and ssun@cern.ch** 
+contact: **krell.tin@gmail.com and ssun@cern.ch** 
 based on vmm-mon by Amilianos Koulouris 
 https://gitlab.cern.ch/aikoulou/vmm-mon
 aikoulou@cern.ch
