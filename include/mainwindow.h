@@ -14,6 +14,7 @@
 
 //QT includes
 #include <QMainWindow>
+#include <QScrollArea>
 #include <QUdpSocket>
 #include <QWidget>
 #include <QStringList>
@@ -27,6 +28,7 @@
 #include <QMessageBox>
 #include <QDate>
 #include <QFileDialog>
+#include <QtGui>
 //C++
 #include <fstream>
 #include <sstream>

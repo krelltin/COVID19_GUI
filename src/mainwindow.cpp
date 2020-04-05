@@ -11,6 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
   ui->setupUi(this);
 
+  //  QScrollArea* scroller = new QScrollArea;
+  //  scroller->setWidget(ui->widget);
+  
   gStyle->SetLegendBorderSize(0);
   gStyle->SetLegendTextSize(0.3);
   
@@ -39,10 +42,10 @@ MainWindow::MainWindow(QWidget *parent) :
   dAna = new Data_Analyzer();
   dAna->setVerbose(verbose);
 
-  dAna->Read_Data( inputDir+"/time_series_19-covid-Confirmed.csv", type_cases_confirmed );
-  dAna->Read_Data( inputDir+"/time_series_19-covid-Deaths.csv",    type_cases_deaths );
-  dAna->Read_Data( inputDir+"/time_series_19-covid-Recovered.csv", type_cases_recovered );
-  
+  dAna->Read_Data( inputDir+"/time_series_covid19_confirmed_global.csv", type_cases_confirmed );
+  dAna->Read_Data( inputDir+"/time_series_covid19_deaths_global.csv",    type_cases_deaths );
+  dAna->Read_Data( inputDir+"/time_series_covid19_recovered_global.csv", type_cases_recovered );
+ 
   //  Total must be calculated before new cases per day
   dAna->CalculateCumulativeTotalForAllProvinces();
   //  Calculate cases per day

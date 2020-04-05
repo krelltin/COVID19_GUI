@@ -239,22 +239,39 @@ void Data_Analyzer::Read_Data(TString input_file, int cases_type) {
 
       for ( uint itoken = 0; itoken<date_vector.size()+4; itoken++ ) { 
 
-	std::getline(ss, token, ',');
-
-	if ( verbose ) std::cout << token << ' ';
-
-	// Province Name
-	if      ( itoken == 0 ) { ProvinceName = token; }
-	// Country Name
-	else if ( itoken == 1 ) { CountryName  = token; }
-	// Latitude
-	else if ( itoken == 2 ) { }
-	// Longitude
-	else if ( itoken == 3 ) { }
+	if ( std::getline(ss, token, ',') ) {
+	  
+	  if ( verbose ) std::cout << token << ' ';
+	  
+	  // Province Name
+	  if      ( itoken == 0 ) { ProvinceName = token; }
+	  // Country Name
+	  else if ( itoken == 1 ) { CountryName  = token; }
+	  // Latitude
+	  else if ( itoken == 2 ) { }
+	  // Longitude
+	  else if ( itoken == 3 ) { }
+	  else {
+	    if ( token != "" ) {
+	      try {
+		rate.push_back( std::stoi(token) );
+	      }
+	      catch (int e) {
+		std::cout << "An exception occurred. stoi. " << e << '\n';
+	      }
+	    }
+	    else {
+	      rate.push_back( 0 );
+	      std::cout << "ERROR: Information Does not line up with number of dates " << std::endl;
+	    }
+	  }
+	}
 	else {
-	  rate.push_back( std::stoi(token) );
+	  rate.push_back( 0 );
+	  std::cout << "ERROR: Information Does not line up with number of dates " << std::endl;
 	}
 
+	  
       } // end of loop over tokens in a single line
 
       //--------------------------------------------------------------//
